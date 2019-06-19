@@ -23,4 +23,25 @@ data$V4 <- factor(data$V4, levels=1:8 ,
                            "석사과정" , "박사과정"))
 
 str(data)
-save.image("data.rda")
+head(data); tail(data)
+
+tableV5 <- table(data$V5)
+tableV5
+barplot( tavleV5,
+         main='출생아(남자)별 빈도', xlab='출생아수',ylab='빈도')
+
+tableV1.V4 <- table(data$V1, data$V4)
+
+tableV1.V4
+barplot(tableV1.V4, legend.text = T, col=c('orange','green'),
+        main='학력에 따른 성별 인원수',xlab='학력',ylab='빈도')
+
+#히스토그램
+hist(data$V2, main = '연령별 분포', xlab='연령',ylab='빈도')
+
+#control이 가능한 아이 = breaks(단위,step)
+hist(data$V2, breaks=c(seq(0, 100, 10)), right = F,
+     main = '연령별 분포',xlab='연령',ylab='빈도')
+
+hist(data$V2, breaks=c(seq(0, 100, 10)), right = F,
+     main = '연령별 분포',xlab='연령',ylab='빈도')
