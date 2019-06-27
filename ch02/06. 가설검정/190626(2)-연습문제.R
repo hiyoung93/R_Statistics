@@ -1,3 +1,5 @@
+library(ggplot2)
+
 # mtcars (am.오토/수동) mpg차이가 통계적으로 유의한가?(t-test활용)
 str(mtcars)
 View(mtcars)
@@ -56,6 +58,9 @@ shapiro.test(p$cty)
 t.test(r$cty, p$cty, paried=T, alternative = "less")
 
 # 3-3 subcompact의 f(전륜구동) or r(후륜구동) 에 따른 도시연비(cty) 검정(colunms - drv)
+mpg
+
+
 data <- subset(mpg,class == 'subcompact')
 
 R <- subset(data,drv=='r')
@@ -64,4 +69,6 @@ f <- subset(data,drv=='f')
 shapiro.test(R$cty) 
 shapiro.test(f$cty)
 
-t.test(R$cty, f$cty, paried=T, alternative = "less")
+t.test(class$subcompact~,paried=T, alternative = "less")
+
+t.test(R$cty~subcompact, f$cty, paried=T, alternative = "less")
