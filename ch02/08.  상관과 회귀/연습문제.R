@@ -1,0 +1,105 @@
+## 1. 자료를 바탕으로 회귀식을 구하고,
+# 아버지의 키가 165cm일때 
+# 아들의 키는 얼마일지 예측하시오
+x <- c(150, 160, 170, 180, 190)	
+y <- c(176, 179, 182, 181, 185)
+# 회귀식 추정
+lm(y~x)
+# 산점도 그리기
+m1 <- lm(y~x)
+plot(y~x,xlab='아버지',ylab='아들')
+abline(m1,col='blue')
+# F-statisic - 도출된 회귀식이 회귀분석 모델전체에 대해 통계적으로 의미가 있는지 파악
+
+# P - Value - 변수가 종속변수에 미치는 영향은 유의한가
+# 수정된R 제곱
+summary(m1)
+
+
+## 2. 자료를 바탕으로 회귀식을 구하고,
+# 월 소득250일때 신용카드 사용량을 예측하시오 
+x <- c(100, 200, 300, 400, 500)
+y <- c(30, 70, 85, 140, 197)
+# 회귀식 추정
+lm(y~x)
+# 산점도 그리기
+m1 <- lm(y~x)
+plot(y~x,xlab='월소득',ylab='카드 사용량')
+abline(m1,col='blue')
+# F-statisic - 도출된 회귀식이 회귀분석 모델전체에 대해 통계적으로 의미가 있는지 파악
+
+# P - Value - 변수가 종속변수에 미치는 영향은 유의한가
+# 수정된R 제곱
+summary(m1)
+
+
+# mtcars의 배기량(disp)에 따른 마력(hp)의 회귀식
+mtcars
+View(mtcars)
+head(mtcars)
+str(mtcars)
+out<- lm(hp~disp, data=mtcars)
+summary(out)
+
+# Packages MASS안에 Boston이용하여 Boston인근 집값결정하는 다중회귀 모델
+library(MASS)
+library(psych)
+# 독립변수(예측변수) - 영향을 미칠 것으로 생각되는 변수 - crim, tax
+# 종속변수(기준변수) - 영향을 받을 것으로 생각되는 변수 - medv
+# 각 계수들을 구해야한다.
+# 영향 끼칠 변수(crim, tax)
+# 영향 받는 변수 (medv : median value of rooms)
+# str(Boston)
+head(Boston)
+# View(Boston)
+B <- as.data.frame(Boston[,c("crim","tax","medv")])
+# 집값결정하는 독립변수가 될 만한 것을 골라 회귀 분석
+fit <- lm(medv~crim+tax,data=Boston)
+summary(fit)
+par(mfrow=c(2,2))
+plot(fit)
+par(mfrow=c(1,1))
+
+# 1번 그림
+# 잔차와 모델에서 예측된(fitted value, Yhat)사이의 그래프
+# 붉은 실선도 평균을 따르지 않는다 라고 할 수 있다.
+
+# 2번째 그림 
+# 정규분포를 따르는 Quantile과 표본의 Quantile의 비교
+# 직선으로 가기에 모델에 적합하다고 볼 수 있다.
+
+# 3번째 그림 
+
+# 4번째 그림 
+# 지렛값, 관측치 49이 가장 먼 거리에 있으며 0.8 이상으로 나옵니다. 
+# 쿡의 거리가 1 이상이면 매우 큰 것이고 0.5도 무시할 수 없는 수준
+# 즉, 
+
+fit1 <- lm(medv~., data=Boston)
+summary(fit1)
+
+# 필요없어보이는 것을 제외하고 다시
+fit2 <- lm(medv ~ zn+nox+rm+dis+rad+ptratio+black+lstat, data=Boston)
+summary(fit2)
+# 필요없어보이는 것을 제외하고 다시
+fit3 <- lm(medv ~ nox+rm+dis+ptratio+black+lstat, data=Boston)
+summary(fit3)
+# AIC(Akaike Information Criterion) : 값이 적을수록 좋은 모델
+AIC(fit1, fit3)
+
+step(fit1, direction = 'backward')
+
+
+fit3 <- lm(medv ~ 1, data = Boston)
+step(fit3, direction = 'forward',
+     scope=~ nox+rm+dis+ptratio+black+lstat)
+step(fit3, direction = 'forward',
+     scope =list(upper = fit1, lower=fit3))
+
+
+install.packages('leaps')
+library(leaps)
+subsets <- regsubsets(medv~., data=Boston,
+                      method = 'seqrep', nbest=4)
+summary(subsets)
+plot(subsets)
